@@ -1,10 +1,15 @@
-# ParamCleaner for Greasemonkey
+# ParamCleaner for Taberareloo
 
 Remove tracking parameter(like ``utm_*`` ) form URL by use of ``history.replaceState`` .
 
 ## Installation
 
-* [ParamCleaner for Greasemonkey](http://userscripts.org/scripts/show/100611 "ParamCleaner for Greasemonkey")
+1. Open Google Chrome, SRWare Iron or Opera 17+
+1. Install [Taberareloo](https://chrome.google.com/webstore/detail/taberareloo/ldcnohnnlpgglecmkldelbmiokgmikno)
+1. Install [ParamCleaner for Taberareloo](http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js)  
+	- Open the above link
+	- Right-click on the page
+	- Select 'Patch - Install this' on the Taberareloo menu
 
 ## Contributing
 
