@@ -5,7 +5,7 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "0.2.0"
+// , "version"     : "0.3.0"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
@@ -13,8 +13,19 @@
 (function (win) {
   'use strict';
 
+  var DATABASE_URL = "http://wedata.github.io/UrlCleaner/items-old.json";
+  var SITEINFOs    = [
+/* cf. http://userscripts.org/scripts/show/70851
+    {
+      url        : '',
+      live       : '',
+      kill       : '',
+      exampleUrl : ''
+    }
+*/
+  ];
+
   if (inContext('background')) {
-    var DATABASE_URL = "http://wedata.github.io/UrlCleaner/items-old.json";
 
     if (!Patches['util.wedata.tbrl.js']) {
       Patches.install('https://raw.github.com/YungSang/patches-for-taberareloo/master/utils/util.wedata.tbrl.js', true);
@@ -160,6 +171,7 @@
     }
   }
 
+  SITEINFOs && (SITEINFOs.length > 0) && SITEINFOs.forEach(tryReplaceState);
   chrome.runtime.sendMessage(TBRL.id, {
     request  : "ParamCleaner_loadSiteInfo"
   }, function (items) {
