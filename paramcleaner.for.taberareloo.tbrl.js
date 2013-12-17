@@ -5,7 +5,7 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "0.1.1"
+// , "version"     : "0.2.0"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
@@ -20,14 +20,30 @@
       Patches.install('https://raw.github.com/YungSang/patches-for-taberareloo/master/utils/util.wedata.tbrl.js', true);
     }
 
-    var items = [];
+    var database = null;
+    var items    = [];
+
+    Menus._register({
+      type     : 'separator',
+      contexts : ['all']
+    });
+    Menus._register({
+      title    : 'ParamCleaner - Refresh SITEINFOs\' cache',
+      contexts : ['all'],
+      onclick: function (info, tab) {
+        database.get(true).addCallback(function (data) {
+          items = JSON.parse(data);
+        });
+      }
+    });
+    Menus.create();
 
     var timer = setInterval(function () {
       if (typeof Wedata === 'undefined') {
         return;
       }
       clearInterval(timer);
-      var database = new Wedata.Database('paramcleaner-for-taberareloo', DATABASE_URL);
+      database = new Wedata.Database('paramcleaner-for-taberareloo', DATABASE_URL);
       database.get().addCallback(function (data) {
         items = JSON.parse(data);
       });
