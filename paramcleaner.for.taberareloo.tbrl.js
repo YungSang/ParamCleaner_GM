@@ -5,7 +5,7 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "0.3.0"
+// , "version"     : "0.4.0"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
@@ -13,7 +13,7 @@
 (function (win) {
   'use strict';
 
-  var DATABASE_URL = "http://wedata.github.io/UrlCleaner/items-old.json";
+  var DATABASE_URL = "http://wedata.github.io/UrlCleaner/items.json";
   var SITEINFOs    = [
 /* cf. http://userscripts.org/scripts/show/70851
     {
