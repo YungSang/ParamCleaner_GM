@@ -5,7 +5,7 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "0.4.0"
+// , "version"     : "0.5.1"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
@@ -26,13 +26,37 @@
   ];
 
   if (inContext('background')) {
-
-    if (!Patches['util.wedata.tbrl.js']) {
-      Patches.install('https://raw.github.com/YungSang/patches-for-taberareloo/master/utils/util.wedata.tbrl.js', true);
-    }
-
     var database = null;
     var items    = [];
+
+    var deferred;
+    var patch = Patches['util.wedata.tbrl.js'];
+    if (patch) {
+      var preference = Patches.getPreferences(patch.name) || {};
+      if (preference.disabled) {
+        Patches.setPreferences(patch.name, update(preference, {
+          disabled : false
+        }));
+        deferred = Patches.loadAndRegister(patch.fileEntry, patch.metadata);
+      }
+      else {
+        deferred = succeed(true);
+      }
+    }
+    else {
+      deferred = Patches.install(
+        'https://raw.github.com/YungSang/patches-for-taberareloo/master/utils/util.wedata.tbrl.js',
+        true
+      );
+    }
+    deferred.addCallback(function (installed) {
+      setTimeout(function () {
+        database = new Wedata.Database('paramcleaner-for-taberareloo', DATABASE_URL);
+        database.get().addCallback(function (data) {
+          items = JSON.parse(data);
+        });
+      }, 100);
+    });
 
     Menus._register({
       type     : 'separator',
@@ -48,17 +72,6 @@
       }
     });
     Menus.create();
-
-    var timer = setInterval(function () {
-      if (typeof Wedata === 'undefined') {
-        return;
-      }
-      clearInterval(timer);
-      database = new Wedata.Database('paramcleaner-for-taberareloo', DATABASE_URL);
-      database.get().addCallback(function (data) {
-        items = JSON.parse(data);
-      });
-    }, 500);
 
     TBRL.setRequestHandler('ParamCleaner_loadSiteInfo', function (req, sender, func) {
       func(items);
