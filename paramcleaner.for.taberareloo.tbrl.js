@@ -5,7 +5,7 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "0.5.1"
+// , "version"     : "0.5.2"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
@@ -29,33 +29,39 @@
     var database = null;
     var items    = [];
 
-    var deferred;
-    var patch = Patches['util.wedata.tbrl.js'];
-    if (patch) {
-      var preference = Patches.getPreferences(patch.name) || {};
-      if (preference.disabled) {
-        Patches.setPreferences(patch.name, update(preference, {
-          disabled : false
-        }));
-        deferred = Patches.loadAndRegister(patch.fileEntry, patch.metadata);
+    Patches.require = Patches.require || function (url) {
+      var name = window.url.parse(url).path.split(/[\/\\]/).pop();
+      var ret = new Deferred();
+      var deferred;
+      var patch = this[name];
+      if (patch) {
+        var preference = this.getPreferences(patch.name) || {};
+        if (preference.disabled) {
+          this.setPreferences(patch.name, MochiKit.Base.update(preference, {
+            disabled : false
+          }));
+          deferred = this.loadAndRegister(patch.fileEntry, patch.metadata);
+        }
+        else {
+          return succeed(true);
+        }
       }
       else {
-        deferred = succeed(true);
+        deferred = this.install(url, true);
       }
-    }
-    else {
-      deferred = Patches.install(
-        'https://raw.github.com/YungSang/patches-for-taberareloo/master/utils/util.wedata.tbrl.js',
-        true
-      );
-    }
-    deferred.addCallback(function (installed) {
-      setTimeout(function () {
-        database = new Wedata.Database('paramcleaner-for-taberareloo', DATABASE_URL);
-        database.get().addCallback(function (data) {
-          items = JSON.parse(data);
-        });
-      }, 100);
+      deferred.addCallback(function (patch) {
+        setTimeout(function () {
+          ret.callback(!!patch);
+        }, 100);
+      });
+      return ret;
+    };
+
+    Patches.require('https://raw.github.com/YungSang/patches-for-taberareloo/master/utils/util.wedata.tbrl.js').addCallback(function (installed) {
+      database = new Wedata.Database('paramcleaner-for-taberareloo', DATABASE_URL);
+      database.get().addCallback(function (data) {
+        items = JSON.parse(data);
+      });
     });
 
     Menus._register({
