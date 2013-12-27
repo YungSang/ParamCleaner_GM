@@ -5,7 +5,7 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "0.5.2"
+// , "version"     : "0.5.3"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
@@ -29,7 +29,7 @@
     var database = null;
     var items    = [];
 
-    Patches.require = Patches.require || function (url) {
+    Patches.require = Patches.require || function (url, delay) {
       var name = window.url.parse(url).path.split(/[\/\\]/).pop();
       var ret = new Deferred();
       var deferred;
@@ -43,7 +43,10 @@
           deferred = this.loadAndRegister(patch.fileEntry, patch.metadata);
         }
         else {
-          return succeed(true);
+          setTimeout(function () {
+            ret.callback(true);
+          }, (typeof delay === 'number') ? delay : 500);
+          return ret;
         }
       }
       else {
@@ -52,7 +55,7 @@
       deferred.addCallback(function (patch) {
         setTimeout(function () {
           ret.callback(!!patch);
-        }, 100);
+        }, (typeof delay === 'number') ? delay : 500);
       });
       return ret;
     };
