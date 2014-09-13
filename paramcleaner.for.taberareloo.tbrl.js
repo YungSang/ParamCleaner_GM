@@ -5,7 +5,7 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "2.0.1"
+// , "version"     : "2.0.2"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
@@ -61,7 +61,7 @@
       });
     };
 
-    Patches.require('https://raw.githubusercontent.com/YungSang/patches-for-taberareloo/ready-for-v4.0.0/utils/util.wedata.tbrl.js').then(function (installed) {
+    Patches.require('https://raw.githubusercontent.com/YungSang/patches-for-taberareloo/master/utils/util.wedata.tbrl.js').then(function (installed) {
       database = new Wedata.Database('paramcleaner-for-taberareloo', DATABASE_URL);
       database.get().then(function (data) {
         items = JSON.parse(data);
