@@ -5,24 +5,13 @@
 // , "description" : "ParamCleaner for Taberareloo"
 // , "include"     : ["background", "content"]
 // , "match"       : ["*://*/*"]
-// , "version"     : "2.0.2"
+// , "version"     : "2.0.3"
 // , "downloadURL" : "http://yungsang.github.io/ParamCleaner-for-Taberareloo/paramcleaner.for.taberareloo.tbrl.js"
 // }
 // ==/Taberareloo==
 
 (function (win) {
   'use strict';
-
-  var version = chrome.runtime.getManifest().version;
-  version = version.split('.');
-  if (version.length > 3) {
-    version.pop();
-  }
-  version = version.join('.');
-  if (semver.gte(version, '3.0.12')) {
-    Patches.install('https://raw.githubusercontent.com/YungSang/ParamCleaner-for-Taberareloo/ready-for-v4.0.0/paramcleaner.for.taberareloo.tbrl.js', true);
-    return;
-  }
 
   var DATABASE_URL = "http://wedata.github.io/UrlCleaner/items.json";
   var SITEINFOs    = [
